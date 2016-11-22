@@ -1,5 +1,5 @@
 # Academy Brawl (pending)
-* [Academy Brawl!](https://drive.google.com/open?id=0B0n90PXBkkhdY0VrWlctSzlOOFU) - Updated [File Size: 21.7 MB] 
+* [Academy Brawl!](https://drive.google.com/open?id=0B0n90PXBkkhdalhSSVg4NXFsVzA) - Updated 
 
 ## Current Play State
 ![alt tag](https://github.com/CjLapuz/AcademyBrawl/blob/master/screenshot.png)
