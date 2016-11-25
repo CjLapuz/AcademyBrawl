@@ -6,71 +6,78 @@ import org.newdawn.slick.state.*;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import entities.*;
+import characters.ComSci;
+
 
 public class PlayState extends BasicGameState {
 	private int ID = 6;
 	private int delta;
+	private int time = 0;
 	
-	private Sound pause, resume;
+	private int indx = 0;    // for the pause selections
 	
-	private Combatant player1, player2;
+	private Image UI, pauseDisplay, resumeSelct, charSelct, menuSelct, arena;  
 	
-	//TODO do this
-	private Image ui;    // for health bars, timers. etc
+	private Sound pause, resume, scroll, hit;
+	
+	private ComSci player1, player2;
+	
+	private boolean paused;
 	
 	// TODO add UI to improve health bars
-	private float hbx1 = 10;	 // health bar coodinates
-	private float hbx2 = 490;
-	private float hby = 15;
+	private float hbx1 = 29;	 // health bar coodinates
+	private float hby = 42;
 	
-	private float hbw = 300;     // health bar width
 	private float hbwM = 292;    // health bar length
 	private float hbwM2 = -292;  // health bar length
-	private float hbh = 30;      // health bar height
-	private Rectangle hb;        // health background
+	private float hbh = 28;      // health bar height
+	
 	private Rectangle hbIn;	     // health foreground
-	private Rectangle hb2;	     // health background
 	private Rectangle hb2In;     // health foreground 
 	public PlayState(int state) {}
 	
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		player1 = new Combatant(1);   // Make player 1
-		player2 = new Combatant(2);   // Make player 2
+		player1 = new ComSci(1);   // Make player 1
+		player2 = new ComSci(2);   // Make player 2
 		player1.init();               // Initialize player 1
 		player2.init();               //Initialize player 2
 		
 		// sound effects when pausing and unpausing
 		pause = new Sound("res/soundEffects/pause.wav");
 		resume = new Sound("res/soundEffects/resume.wav");
+		scroll = new Sound("res/soundEffects/choose.wav");
+		hit = new Sound("res/soundEffects/hit.wav");
 		
-		hb = new Rectangle(hbx1, hby, hbw, hbh);   // first player health bar
-		hb2 = new Rectangle(hbx2, hby, hbw, hbh);    // second player health bar
+		// images initialization
+		UI = new Image("res/PlayImgs/Gui.png");
+		pauseDisplay = resumeSelct = new Image("res/PlayImgs/resume.png");
+		charSelct = new Image("res/PlayImgs/charSelect.png");
+		menuSelct = new Image("res/PlayImgs/menu.png");
+		arena = new Image("res/Arenas/arena1.png");
+		
+		
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-				
+		
+		arena.draw();
 		player1.render(gc, g);
 		player2.render(gc, g);
 		
 		// show amount of time passed and how to puase and resume
-		g.drawString("TIME ELAPSED = " + delta, 100, 100);
-		if (!gc.isPaused())
-			g.drawString("PRESS ESC TO PAUSE", 100, 50);
-		else 
-			g.drawString("PRESS ESC TO UNPAUSE", 100, 50);
+		g.drawString("" +time, 385, 50);
+		
+		if (paused){
+			pauseDisplay.draw(200, 100);
+		}
 		
 		// initialize health bars
 		hbIn = new Rectangle(hbx1 + 4, hby + 4, hbwM, hbh - 8);
-		hb2In = new Rectangle(790 - 4, hby + 4, hbwM2, hbh - 8);
+		hb2In = new Rectangle(790 - 22, hby + 4, hbwM2, hbh - 8);
 		
-		g.fill(hb);
-		g.fill(hb2);
-		g.draw(hb);
-		g.draw(hb2);
 		
 		// coloring and filling the health bar
 		g.setColor(Color.red);
@@ -94,41 +101,97 @@ public class PlayState extends BasicGameState {
 		} else {
 			hbwM2 = 0;
 		}
-		g.setColor(Color.gray);  // background
+		g.setColor(Color.cyan);  
+		
+		g.setBackground(Color.gray);
+		
+		// For debugging purposes
+		player1.draw(g);
+		player2.draw(g);
+				
+		UI.draw();				//draw the player UI
+		
 
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		
-		this.delta += delta;		// update the amount of time passed
+		this.delta += delta;		// update the amount of time passed in milliseconds
+		if (this.delta % 1000  == 0)
+			time += 1;   			// update the amount of time passed in seconds
 		
 		player1.update(gc, delta);
 		player2.update(gc, delta);
 		
 		Input in = gc.getInput();
 		
-		// Pausing while in game
-		//TODO add a pop up UI for various functions
-		if (in.isKeyPressed(Input.KEY_ESCAPE)){
-			if (!gc.isPaused()){
-				pause.play();
-				TitleScreen.pauseMusic();
-				gc.pause();
-			} else {
-				resume.play();
-				TitleScreen.resumeMusic();
+		
+		if (paused){
+			if (in.isKeyPressed(Input.KEY_ENTER) || in.isKeyPressed(Input.KEY_J)){
+				paused = false;
 				gc.setPaused(false);
+				if (indx == 0){
+					if (OptionState.sfxActv)        // when sfx is activated
+						resume.play();
+					TitleScreen.resumeMusic();
+				} else if (indx == 1){
+					reset();
+					if (OptionState.sfxActv)        // when sfx is activated
+						resume.play();
+					sbg.enterState(GameTester.characterSelect, new FadeOutTransition(), new FadeInTransition());
+				} else {
+					reset();
+					if (OptionState.sfxActv)        // when sfx is activated
+						resume.play();
+					sbg.enterState(GameTester.menu, new FadeOutTransition(), new FadeInTransition());
+				}
+			} else if (in.isKeyPressed(Input.KEY_UP) || in.isKeyPressed(Input.KEY_W)){
+				if (OptionState.sfxActv)        // when sfx is activated
+					scroll.play();
+				if (indx == 0){
+					indx = 2;
+					pauseDisplay = menuSelct;
+				} else if (indx == 1){
+					indx = 0;
+					pauseDisplay = resumeSelct;
+				} else {
+					indx = 1;
+					pauseDisplay = charSelct;
+				}
+			} else if (in.isKeyPressed(Input.KEY_DOWN) || in.isKeyPressed(Input.KEY_S)){
+				if (OptionState.sfxActv)        // when sfx is activated
+					scroll.play();
+				if (indx == 0){
+					indx = 1;
+					pauseDisplay = charSelct;
+				} else if (indx == 1){
+					indx = 2;
+					pauseDisplay = menuSelct;
+				} else {
+					indx = 0;
+					pauseDisplay = resumeSelct;
+				}
 			}
-			
 		}
-
+		else {
+			if (in.isKeyPressed(Input.KEY_ESCAPE) || in.isKeyPressed(Input.KEY_BACK)){
+				if (!gc.isPaused()){
+					paused = true;
+					if (OptionState.sfxActv)        // when sfx is activated
+						pause.play();
+					TitleScreen.pauseMusic();
+					gc.pause();
+				}
+			}
+		}
 			if (player1.attacking){
 				if (player1.getView() == 0)      // the players hit box extends when attacking
 					player1.resize(175, 175);
 				else 
 					player2.resize(175, 175);    // the players hit box extends when attacking
 				if (player1.hitTest(player2)){
+					hit.play();
 					player2.hit = true;          // if player 1 hits player 2
 					hbwM2 += 3;                  // player 1loses hp
 				}
@@ -136,8 +199,7 @@ public class PlayState extends BasicGameState {
 			
 			if (hbwM2 >= 0){
 				System.out.println("PLAYER 2 LOSE");    // if hp is zero you are led to the game analysis state 
-				TitleScreen.musicCredits();				// TODO add some victory taunt and victory UI
-				sbg.enterState(GameTester.summary, new FadeOutTransition(), new FadeInTransition());
+				endGame(sbg);
 			}
 			
 			else if (player2.attacking){
@@ -146,13 +208,13 @@ public class PlayState extends BasicGameState {
 				else 
 					player1.resize(175, 175);  // the players hit box extends when attacking
 				if (player2.hitTest(player1)){
+					hit.play();
 					player1.hit = true;        // if player 2 hits player 1
 					hbwM -= 3;                 // player 1loses hp
 				}
 			if (hbwM <= 0){
 				System.out.println("PLAYER 1 LOSE");    // if hp is zero you are led to the game analysis state 
-				TitleScreen.musicCredits();				// TODO add some victory taunt and victory UI
-				sbg.enterState(GameTester.summary, new FadeOutTransition(), new FadeInTransition());
+				endGame(sbg);
 			}
 			
 			}
@@ -196,7 +258,25 @@ public class PlayState extends BasicGameState {
 		}
 		
 	}
+	
+	private void reset(){
+		delta = 0;
+	    time = 0;
+		
 
+		hbwM = 292;    
+		hbwM2 = -292;  
+		player1.x = 0;
+		player2.x = 800;
+	}
+	
+	private void endGame(StateBasedGame sbg){
+		reset();
+		TitleScreen.musicCredits();				// TODO add some victory taunt and victory UI
+		sbg.enterState(GameTester.summary, new FadeOutTransition(), new FadeInTransition());
+	}
+	
+	
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub
