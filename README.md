@@ -1,5 +1,5 @@
 # Academy Brawl (pending)
-* [Academy Brawl!](https://drive.google.com/open?id=0B0n90PXBkkhdalhSSVg4NXFsVzA) - Updated 
+* [Academy Brawl!](https://drive.google.com/open?id=0B0n90PXBkkhdalhSSVg4NXFsVzA) - Updated(as of Nov. 18 2016) 
 
 ## Current Play State
 ![alt tag](https://github.com/CjLapuz/AcademyBrawl/blob/master/screenshot.png)
