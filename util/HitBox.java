@@ -1,63 +1,84 @@
 package util;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.Color;
 
 public class HitBox {
-	public float x, y, width, height;
+	private float x, y, width, height;
 	
-	public HitBox(){}
-	
-	public HitBox(float x, float y, float width, float height){
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-	}
-	public float getHalfWidth(){ return (width / 2.0f); }
-	
-	public float getHalfHeight(){ return (height / 2.0f); }
-	
-	public float getCenterX(){ return (x + getHalfWidth()); }
-	
-	public float getCenterY(){ return (y + getHalfHeight()); }
-    
-	// Gets the x-points
-	public float getTopLeftX(){ return (x); }
-	public float getBottomRightX(){ return (getCenterX() + (getHalfWidth() / 2.0f)); }
-	
-	// Gets the y-points
-	public float getTopLeftY(){ return (y + height); }
-	public float getBottomRightY(){ return (getCenterY() + (getHalfHeight() / 2.0f)); }
-	
-	public boolean hitTest(HitBox b){
+	public HitBox(){
 		
-		// if one rectangles is on the left side of other
-        if (getBottomRightX() < b.getTopLeftX() || b.getBottomRightX() < getTopLeftX()) {
-            return false;
-        }
-
-        // if one of the rectangles is below the other.
-        if (getTopLeftY() < b.getBottomRightY() || b.getTopLeftY() < getBottomRightY()) {
-            return false;
-        }
-        return true;
 	}
 	
-	// Resizes the box
-	public void resize(float width, float height){
+	public HitBox(float x, float y, float width, float height) {
+		this.x = x;
+		this.y = y;
 		this.width = width;
 		this.height = height;
 	}
-	//Repositions the box
-	public void rePosition(float x, float y){
+	
+	public float getY() {
+		return y;
+	}
+
+	public void setY(float y) {
+		this.y = y;
+	}
+
+	public float getWidth() {
+		return width;
+	}
+
+	public void setWidth(float width) {
+		this.width = width;
+	}
+
+	public float getHeight() {
+		return height;
+	}
+
+	public void setHeight(float height) {
+		this.height = height;
+	}
+
+	public float getX() {
+		return x;
+	}
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	public float getCenterX() {
+		return x + (width / 2.0f);
+	}
+
+	public float getCenterY() {
+		return y + (height / 2.0f);
+	}
+
+	public void resize(float width, float height) {
+		this.width = width;
+		this.height = height;
+	}
+	
+	public void rePosition(float x, float y) {
 		this.x = x;
 		this.y = y;
 	}
-	
-	//Draw the box for debugging purposes
-	public void draw(Graphics g){
+	public void draw(Graphics g) {
 		g.setColor(Color.red);
 		g.drawRect(x, y, width, height);
+	}
+
+	public void update(float x, float y) {
+		setX(x);
+		setY(y);
+	}
+	
+	public Rectangle getBounds(){ return new Rectangle(x, y, width, height);}
+	
+	public boolean hitTest(HitBox b){
+		return getBounds().intersects(b.getBounds());
 	}
 }
