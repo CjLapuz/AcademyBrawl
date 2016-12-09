@@ -2,8 +2,10 @@ package main;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 //import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -17,23 +19,24 @@ public class BattleSummaryState extends BasicGameState{
 	
 	int delta;		//to store the amount of time passed
 	
-	//private Sound back;
+	private Sound back;
+	
+	private Image img;
 	
 	public BattleSummaryState(int state) {}
 	
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		
-		//TODO add background images
-		//back = new Sound("res/soundEffects/close.wav");
+		img = new Image("res/PlayImgs/endBGD.png");
+		back = new Sound("res/soundEffects/close.wav");
 		
 	}/*End of init*/
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		
-		// TODO: actual battle analysis
-		g.drawString("PRESS ANY ENTER TO CONTINUE", 100, 100);
+		img.draw();
 		
 	}/*End of render*/
 
@@ -44,8 +47,9 @@ public class BattleSummaryState extends BasicGameState{
 		
 		
 		if (in.isKeyPressed(Input.KEY_ENTER)){
-			
+			back.play();
 			TitleScreen.pauseMusic();
+			CharacterSelectState.reset();
 			sbg.enterState(GameTester.characterSelect,  new CombinedTransition(), new VerticalSplitTransition());
 		}
 	}/*End of update*/
