@@ -11,35 +11,9 @@ The reek of bloodlust is in the air as the days of intramurals sneaks closer. In
 
 This is a project made in order to satisfy the requirements of CMSC 22. This game would be a Java programmed 2-Dimensional figting game with references such as King of Fighters Wing. However, since the developers lack expertise in Artificial Intelligence programming, the game would only feature player vs player mode. Nothing is still set in  stone since some significant changes may occur during development. 
 
-### Changelog (as of 11/22/16 :: 5:08 PM (UTC + 8))
+### Changelog (as of 12/09/16 :: 1:00 PM (UTC + 8))
 
-Avaialable Features
-
-```
-*Studio Name and Splash Screen
-*Main Menu and basic button behaviors (initial)
-*Credits
-*Option (final)
-*Control Diagram (final)
-*Character Select (initial)
-*Music (initial)
-*Render of both players
-*Basic controls
-*Player vs Player interaction  (initial)
-*Player UI (hp bar, etc.) [beta]
-*Battle Summary / End of Game State (just text indicators for now)
-*Player Poses Display / Pre-game Display (just text fro now)
-```
-
-Missing Features
-
-```
-*Custom Character Designs
-*Move List
-*Background Image (arenas)
-*Unlockable Secret Characters
-...maybe some additional features during development
-```
+!Game is Finished
 
 ### Player Controls
 
@@ -47,8 +21,8 @@ Player 1
 
 ```
              Jump
-              [W]                     [I] - Weak punch  [O] - Strong punch  [P] - Ultimate Ability
-Move Left [A]     [S] Move Right      [J] - Weak kick   [K] - Strong kick   [L] - Dash
+              [W]                     [I] - Weak punch  [O] - Strong punch  
+Move Left [A]     [S] Move Right      [J] - Weak kick   [K] - Strong kick   
               [D]
               Crouch
 ```
@@ -57,8 +31,8 @@ Player 2
 
 ```
              Jump                  *numpad keys
-              [↑]                     [4] - Weak punch  [5] - Strong punch  [6] - Ultimate Ability
-Move Left [←]     [→] Move Right      [1] - Weak kick   [2] - Strong kick   [3] - Dash
+              [↑]                     [4] - Weak punch  [5] - Strong punch 
+Move Left [←]     [→] Move Right      [1] - Weak kick   [2] - Strong kick  
               [↓]
               Crouch
 ```
