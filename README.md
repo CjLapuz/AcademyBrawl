@@ -1,7 +1,5 @@
 # Academy Brawl (pending)
 * [Academy Brawl!](https://drive.google.com/open?id=0B0n90PXBkkhdTm1ZcUQ5MjlBYTg) - Updated(as of Dec. 3 2016) 
-*note: still missing some key features
-
 
 
 
@@ -13,7 +11,7 @@ This is a project made in order to satisfy the requirements of CMSC 22. This gam
 
 ### Changelog (as of 12/09/16 :: 1:00 PM (UTC + 8))
 
-!Game is Finished
+Game is Finished!
 
 ### Player Controls
 
