@@ -1,4 +1,4 @@
-# Academy Brawl (pending)
+# Academy Brawl 
 * [Academy Brawl!](https://drive.google.com/open?id=0B0n90PXBkkhdTm1ZcUQ5MjlBYTg) - Updated(as of Dec. 3 2016) 
 
 
